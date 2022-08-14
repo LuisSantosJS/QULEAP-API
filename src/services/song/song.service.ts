@@ -17,9 +17,9 @@ export class SongService {
                 planId: true
             }
         });
-         if(!user?.planId){
+        if (!user?.planId) {
             throw new NotFoundException(["Plan not found"])
-         }
+        }
 
         return await this.prisma.song.findMany({
             where: {
@@ -34,9 +34,9 @@ export class SongService {
 
     public async listSongsMusics(): Promise<Song[]> {
         return await this.prisma.song.findMany({
-            include:{
+            include: {
                 SongPlanMap: {
-                    include:{
+                    include: {
                         plan: true
                     }
                 }
@@ -114,7 +114,7 @@ export class SongService {
         }
         if (!!data?.plans && data?.plans.length > 0) {
             const oldPlans = song.SongPlanMap.map(res => res.plan);
-            const removePlans = oldPlans.filter(res => data.plans.find(e => e !== res.id && e !== res.description));
+            let removePlans = oldPlans.filter(e => data.plans.filter(r => r == e.description).length < 0)
             if (!!removePlans && removePlans.length > 0) {
                 await this.prisma.userSongMap.deleteMany({
                     where: {
@@ -146,18 +146,9 @@ export class SongService {
                             id: { notIn: oldPlans.map(res => res.id) }
                         },
                         {
-                            OR: [
-                                {
-                                    id: {
-                                        in: data?.plans
-                                    }
-                                },
-                                {
-                                    description: {
-                                        in: data?.plans
-                                    }
-                                }
-                            ]
+                            description: {
+                                in: data?.plans
+                            }
                         }
                     ]
 
