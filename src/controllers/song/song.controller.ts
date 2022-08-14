@@ -14,13 +14,22 @@ export class SongController {
     constructor(private songService: SongService) { }
 
     @UseGuards(JwtAuthGuard)
-    @ApiOperation({ summary: 'Listar músicas' })
+    @ApiOperation({ summary: 'Listar músicas para o usuário' })
     @ApiResponse({ status: 200, type: [SongOutputDTO], description: 'Retorna a lista de músicas' })
     @Get('/all')
     async all(@Req() req) {
         const songs = await this.songService.listSongs(req.user.id);
         return plainToInstance(SongOutputDTO, songs, { excludeExtraneousValues: true });
     }
+
+    @UseGuards(JwtAuthGuardAdmin)
+    @ApiOperation({ summary: 'Listar músicas' })
+    @ApiResponse({ status: 200, type: [SongOutputDTO], description: 'Retorna a lista de músicas' })
+    @Get('/all-musics')
+    async allMusics(@Req() req) {
+        return await this.songService.listSongsMusics();
+    }
+
 
     @UseGuards(JwtAuthGuardAdmin)
     @ApiOperation({ summary: 'Criar música' })

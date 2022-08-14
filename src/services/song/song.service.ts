@@ -28,6 +28,18 @@ export class SongService {
                         planId: user.planId
                     }
                 }
+            },
+        })
+    }
+
+    public async listSongsMusics(): Promise<Song[]> {
+        return await this.prisma.song.findMany({
+            include:{
+                SongPlanMap: {
+                    include:{
+                        plan: true
+                    }
+                }
             }
         })
     }
