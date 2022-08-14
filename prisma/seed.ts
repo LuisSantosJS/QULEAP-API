@@ -45,7 +45,7 @@ const upsertUserAdmin = async (email: string, password: string) => {
             password: hash
         },
         update: {
-            password
+            password: hash
         }
     });
     const roleMap = await prisma.userRoleMap.findFirst({

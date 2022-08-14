@@ -17,7 +17,7 @@ export class AuthService {
         if (!user) {
             throw new NotFoundException(['User not found']);
         }
-
+console.log(password, user.password)
         const validPassword = bcrypt.compareSync(password, user.password);
         if (!validPassword) {
             throw new ConflictException(['Invalid password']);
