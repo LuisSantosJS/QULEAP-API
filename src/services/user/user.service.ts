@@ -21,6 +21,9 @@ export class UserService {
                         }
                     }
                 }
+            },
+            include:{
+                plan: true
             }
         })
     }

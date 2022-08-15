@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose } from "class-transformer";
-import { IsEmail, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsEmail, IsNotEmpty, IsNumber, IsString, MinLength } from "class-validator";
 
 
 export class SongInputDTO {
@@ -14,6 +14,7 @@ export class SongInputDTO {
     @IsNotEmpty()
     @Expose()
     @ApiProperty({ nullable: false, name: 'plans', type: () => [String] })
+    @MinLength(1)
     plans: string[];
 }
 
